@@ -130,13 +130,21 @@
             <div id="card-layout-sheet2" class="collapse show">
               <div class="card-body text-center">
     
-                <img src="files/layout_machine/mc1.png"
+                <img src="<?= asset('image/mc1.png')?>"
                     class="img-fluid rounded cursor-pointer"
                     style="max-width:300px;"
                     data-bs-toggle="modal"
                     data-bs-target="#imageModal"
                     onclick="showImage(this.src)">
-    
+                <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content bg-transparent border-0 shadow-none">
+                      <div class="modal-body p-0 text-center">
+                        <img id="previewImage" src="" class="img-fluid rounded" alt="Preview">
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -244,13 +252,26 @@
             <div id="card-layout-sheet4" class="collapse show">
               <div class="card-body text-center">
     
-                <img src="files/layout_machine/mc1.png"
-                    class="img-fluid rounded cursor-pointer"
-                    style="max-width:300px;"
-                    data-bs-toggle="modal"
-                    data-bs-target="#imageModal"
-                    onclick="showImage(this.src)">
-    
+                <div class="card-body" style="height: 250px; overflow: hidden; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#pdfModal">
+                  <iframe src="<?= asset('image/plan_injecttion.pdf')?>" width="100%" height="100%" style="border:none; pointer-events:none;">
+                  </iframe>
+                </div>
+                <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="pdfModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-fullscreen" role="document">
+                    <div class="modal-content" style="height: 100vh;">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Preview Rencana Produksi</h5>
+                        <button type="button btn-primary" class="btn btn-red" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×Close</span>
+                        </button>
+                      </div>
+                      <div class="modal-body p-0" style="height: calc(100vh - 56px);">
+                        <iframe src="<?= asset('image/plan_injecttion.pdf')?>" width="100%" height="100%" style="border:none;">
+                        </iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -335,11 +356,11 @@ DIKECUALIKAN</h1>
                     <tr>
                       <td>
                         
-                        <img src="../fambook/files/photos/73647.JPG" class="img-responsive" alt="Image" style="width:130px;height:140px;">
+                        <img src="<?= asset('image/73647.jfif')?>"  alt="Image" style="width:130px;height:140px;">
                         
                       </td>
                       <td>
-                        <img src="../fambook/files/photos/73417.JPG" class="img-responsive" alt="Image" style="width:130px;height:140px;">
+                        <img src="<?= asset('image/73417.jfif')?>"  alt="Image" style="width:130px;height:140px;">
                       </td>
                     </tr>
                     <tr>
@@ -407,7 +428,7 @@ DIKECUALIKAN</h1>
             <div id="card-layout-sheet8" class="collapse show">
               <div class="card-body text-center">
     
-                <img src="files/layout_machine/mc1.png"
+                <img src=""
                     class="img-fluid rounded cursor-pointer"
                     style="max-width:300px;"
                     data-bs-toggle="modal"
@@ -660,6 +681,9 @@ DIKECUALIKAN</h1>
               btn.classList.add('collapsed');
           });
       });
+    function showImage(src) {
+      document.getElementById('previewImage').src = src;
+    }
     </script>
     <!-- Libs JS -->
     <script src="<?= asset('tabler/dist/libs/apexcharts/dist/apexcharts.min.js?1692870487')?>" defer></script>
