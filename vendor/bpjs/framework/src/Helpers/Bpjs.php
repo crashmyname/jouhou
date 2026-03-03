@@ -284,7 +284,10 @@ class Bpjs
         $files = scandir($migrationPath);
 
         $pdo = new \PDO(
-            env('DB_CONNECTION', 'mysql') . ':host=' . env('DB_HOST', '127.0.0.1') . ';dbname=' . env('DB_DATABASE'),
+            env('DB_CONNECTION', 'mysql')
+            . ':host=' . env('DB_HOST', '127.0.0.1')
+            . ';port=' . env('DB_PORT', 3306)
+            . ';dbname=' . env('DB_DATABASE'),
             env('DB_USERNAME'),
             env('DB_PASSWORD'),
             [

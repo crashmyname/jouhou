@@ -9,7 +9,7 @@
     <link href="<?= asset('tabler/dist/css/tabler-payments.min.css?1692870487')?>" rel="stylesheet"/>
     <link href="<?= asset('tabler/dist/css/tabler-vendors.min.css?1692870487')?>" rel="stylesheet"/>
     <link href="<?= asset('tabler/dist/css/demo.min.css?1692870487')?>" rel="stylesheet"/>
-    <link rel="shortcut icon" href="<?= asset('bpjs.png')?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= asset('ISE.png')?>" type="image/x-icon">
   </head>
     <style>
     .toggle-svg {
