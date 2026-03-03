@@ -44,7 +44,6 @@ class UserController extends BaseController
 
     public function update($id, Request $request, UserService $userService)
     {
-        vd($request->all());
         $result = $userService->update($id,$request->all());
         return Response::json([
             'status' => $result['status'],

@@ -9,6 +9,7 @@ class CreateC4mTable
     {
         $table = new SchemaBuilder('c_4m');
         $table->id('c4mId');
+        $table->bigInteger('laneId');
         $table->string('man')->nullable();
         $table->string('machine')->nullable();
         $table->string('material')->nullable();

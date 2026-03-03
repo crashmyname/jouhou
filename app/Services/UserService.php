@@ -49,7 +49,7 @@ class UserService
     public function update($id, array $data)
     {
         $attributes = [
-            'nama' => $data['nama'],
+            'name' => $data['name'],
         ];
         if(!empty($data['password'])){
             $attributes['password'] = Hash::make($data['password']);

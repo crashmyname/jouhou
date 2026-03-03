@@ -388,27 +388,18 @@ if (!function_exists('storage_path')) {
     }
 }
 
+function backend_url(string $path = ''): string
+{
+    $base = rtrim(env('BACKEND_URL'), '/');
+
+    return $path
+        ? $base . '/' . ltrim($path, '/')
+        : $base;
+}
 
 function storage($path)
 {
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-
-    $documentRoot = $_SERVER['DOCUMENT_ROOT'] ?? null;
-    $physicalBasePath = BPJS_BASE_PATH;
-
-    if ($documentRoot) {
-        $documentRoot = realpath($documentRoot);
-        $relativePath = str_replace('\\', '/', str_replace($documentRoot, '', $physicalBasePath));
-        $relativePath = '/' . trim($relativePath, '/');
-    } else {
-        $relativePath = '/' . trim(basename($physicalBasePath), '/');
-    }
-    if ($relativePath === '/') {
-        $relativePath = '';
-    }
-
-    return $protocol . $host . $relativePath . '/storage/public/'.ltrim($path,'/');
+    return backend_url('storage/public/' . ltrim($path, '/'));
 }
 
 function storage_secure(string $filename, int $ttlSeconds = 3600): string
@@ -418,7 +409,7 @@ function storage_secure(string $filename, int $ttlSeconds = 3600): string
         'exp' => time() + $ttlSeconds
     ]);
 
-    $token = \Helpers\Crypto::encrypt($payload);
+    $token = Bpjs\Framework\Helpers\Crypto::encrypt($payload);
 
     return base_url() . 'file/secure?token=' . urlencode($token);
 }
@@ -431,7 +422,7 @@ function serve_secure_file()
         return new \Bpjs\Core\Response('Missing token', 400);
     }
 
-    $decoded = \Helpers\Crypto::decrypt($token);
+    $decoded = Bpjs\Framework\Helpers\Crypto::decrypt($token);
     if (!$decoded) {
         return new \Bpjs\Core\Response('Invalid token', 403);
     }

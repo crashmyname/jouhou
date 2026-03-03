@@ -9,6 +9,7 @@ class CreateCOSituationTable
     {
         $table = new SchemaBuilder('c_o_situation');
         $table->id('cosId');
+        $table->bigInteger('laneId');
         $table->string('noMcLane')->nullable();
         $table->date('date');
         $table->string('typeModel')->nullable();

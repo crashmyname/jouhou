@@ -8,14 +8,17 @@
             document.getElementById('uname').value = user.name ?? '';
         });
         const table = new TablePlus({
-            url : getUser,
+            url : getCos,
             columns : {
-                username : 'NIK',
-                name : 'Name',
+                noMcLane : 'No Machine Lane',
+                date : 'Date',
+                typeModel : 'Type Model',
+                zeroClaim : 'Zero Claim',
+                lasClaim : 'Last Claim',
             },
             perPage: 10,
             perPageOptions: [10,20,50,100],
-            rowIdentifier: 'userId',
+            rowIdentifier: 'cosId',
             savePreferences: true,
             customActions: [
                 {
@@ -53,7 +56,7 @@
                         Swal.fire({
                             title: 'Delete',
                             icon: 'warning',
-                            text: `Yakin ingin dihapus ${selectedData.name}?`,
+                            text: `Yakin ingin dihapus ${selectedData.noMcLane}?`,
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
@@ -62,7 +65,7 @@
                             if (result.isConfirmed) {
                                 $.ajax({
                                     type: 'DELETE',
-                                    url: deleteUser +'/'+ selectedData.userId,
+                                    url: deleteCos +'/'+ selectedData.cosId,
                                     headers: {
                                         'X-CSRF-TOKEN': csrfToken
                                     },
@@ -111,42 +114,22 @@
                 }
             ],
         })
-        table.render('#userTable')
+        table.render('#cosTable')
 $(document).ready(function(){
     crud()
-    $('#username').on('change', function(e){
-        e.preventDefault()
-        $.ajax({
-            url : urlEmp,
-            type: 'POST',
-            data : {
-                nik : $(this).val()
-            },
-            headers : {
-                'X-CSRF-TOKEN' : csrfToken
-            },
-            success: function(response){
-                if(response.status === 200) {
-                    $('#name').val(response.data.nama)
-                    $('#section').val(response.data.kode_section)
-                    $('#email').val(response.data.work_email)
-                }
-            }
-        })
-    })
 })
 
 function crud()
 {
-    $('#adduser').on('click', function(e){
+    $('#addcos').on('click', function(e){
         e.preventDefault()
-        var form = new FormData($('#formadduser')[0])
-        const btnAdd = $('#adduser')
+        var form = new FormData($('#formaddcos')[0])
+        const btnAdd = $('#addcos')
         const btnLoading = $('#loading')
         btnAdd.hide()
         btnLoading.show()
         $.ajax({
-            url : createUser,
+            url : createCos,
             type: 'POST',
             data : form,
             processData: false,
@@ -206,16 +189,17 @@ function crud()
             }
         })
     })
-    $('#edituser').on('click', function(e){
+    $('#editcos').on('click', function(e){
         e.preventDefault()
         var selected = table.rows({selected: true}).ids()
-        var form = new FormData($('#formedituser')[0])
-        const btnAdd = $('#edituser')
+        console.log(selected)
+        var form = new FormData($('#formeditcos')[0])
+        const btnAdd = $('#editcos')
         const btnLoading = $('#loadingedit')
         btnAdd.hide()
         btnLoading.show()
         $.ajax({
-            url : editUser +'/'+ selected,
+            url : editCos +'/'+ selected,
             type: 'POST',
             data : form,
             processData: false,
@@ -274,10 +258,5 @@ function crud()
                 })
             }
         })
-    })
-    $(document).on('click','.deleteuser', function(e){
-        e.preventDefault()
-        var selected = table.rows({selected: true}).ids()
-            
     })
 }

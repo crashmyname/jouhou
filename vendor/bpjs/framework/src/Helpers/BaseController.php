@@ -503,30 +503,11 @@ class BaseController {
 
     function base_url(string $path = ''): string
     {
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            ? 'https://'
-            : 'http://';
-    
-        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    
-        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-    
-        $dir = str_replace('\\', '/', dirname($scriptName));
-        if ($dir === '/' || $dir === '\\') {
-            $dir = '';
-        }
-    
-        $url = $protocol . $host . $dir;
-    
-        if (!str_ends_with($url, '/')) {
-            $url .= '/';
-        }
-    
-        if ($path !== '') {
-            $url .= ltrim($path, '/');
-        }
-    
-        return $url;
+        $base = rtrim(env('APP_URL'), '/') . '/';
+
+        return $path
+            ? $base . ltrim($path, '/')
+            : $base;
     }
 
     public function arrayGet($array, $key, $default)

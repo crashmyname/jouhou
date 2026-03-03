@@ -2,6 +2,8 @@
 
 use App\Controllers\ApiController;
 use App\Controllers\AuthController;
+use App\Controllers\COSController;
+use App\Controllers\LaneController;
 use App\Controllers\UserController;
 use Bpjs\Framework\Helpers\AuthMiddleware;
 use Bpjs\Framework\Helpers\Route;
@@ -25,5 +27,22 @@ Route::group([AuthMiddleware::class], function(){
     Route::put('/admin/user/{id}',[UserController::class,'update'])->name('user.update');
     Route::delete('/admin/user/{id}',[UserController::class,'destroy'])->name('user.destroy');
     
+    // LANE
+    Route::get('/admin/lane',[LaneController::class,'index'])->name('lane.index');
+    Route::get('/admin/lane/getdata',[LaneController::class,'getData'])->name('lane.getdata');
+    Route::post('/admin/lane',[LaneController::class,'store'])->name('lane.create');
+    Route::put('/admin/lane/{id}',[LaneController::class,'update'])->name('lane.update');
+    Route::delete('/admin/lane/{id}',[LaneController::class,'destroy'])->name('lane.destroy');
+
+    // COS
+    Route::get('/admin/cos',[COSController::class,'index'])->name('cos.index');
+    Route::get('/admin/cos/getdata',[COSController::class,'getData'])->name('cos.getdata');
+    Route::post('/admin/cos',[COSController::class,'store'])->name('cos.create');
+    Route::put('/admin/cos/{id}',[COSController::class,'update'])->name('cos.update');
+    Route::delete('/admin/cos/{id}',[COSController::class,'destroy'])->name('cos.destroy');
+
     Route::post('/emp',[ApiController::class, 'getEmployee'])->name('getemp');
+});
+Route::get('/file/secure',function(){
+    serve_secure_file();
 });
