@@ -7,9 +7,18 @@ use App\Models\CFourM;
 class CFourMRepository
 {
     // Repository here
+    public function C4MisExists($id)
+    {
+        return CFourM::exists(['laneId'=>$id]);
+    }
+
+    public function getById($id)
+    {
+        return CFourM::find($id);
+    }
     public function create4M(array $data)
     {
-        return CFourM::create($data)->toArray();
+        return CFourM::create($data);
     }
 
     public function update4M($id, array $data)

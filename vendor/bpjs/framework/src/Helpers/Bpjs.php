@@ -283,18 +283,7 @@ class Bpjs
         $migrated = $this->getMigrationLog() ?? [];
         $files = scandir($migrationPath);
 
-        $pdo = new \PDO(
-            env('DB_CONNECTION', 'mysql')
-            . ':host=' . env('DB_HOST', '127.0.0.1')
-            . ';port=' . env('DB_PORT', 3306)
-            . ';dbname=' . env('DB_DATABASE'),
-            env('DB_USERNAME'),
-            env('DB_PASSWORD'),
-            [
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            ]
-        );
+        $pdo = $this->createPDO();
 
         foreach ($files as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
@@ -336,6 +325,42 @@ class Bpjs
                 }
             }
         }
+    }
+
+    protected function createPDO()
+    {
+        $driver = env('DB_CONNECTION', 'mysql');
+        $host = env('DB_HOST', '127.0.0.1');
+        $port = env('DB_PORT');
+        $database = env('DB_DATABASE');
+        $username = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+
+        switch ($driver) {
+            case 'mysql':
+                $dsn = "mysql:host=$host;port=$port;dbname=$database;charset=utf8mb4";
+                break;
+
+            case 'pgsql':
+                $dsn = "pgsql:host=$host;port=$port;dbname=$database";
+                break;
+
+            case 'sqlsrv':
+                $dsn = "sqlsrv:Server=$host,$port;Database=$database";
+                break;
+
+            case 'sqlite':
+                $dsn = "sqlite:$database";
+                break;
+
+            default:
+                throw new \Exception("Driver database tidak didukung: $driver");
+        }
+
+        return new \PDO($dsn, $username, $password, [
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        ]);
     }
 
     protected function getClassNameFromFile($file)

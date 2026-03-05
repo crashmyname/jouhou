@@ -1,15 +1,7 @@
-        document.addEventListener('click', function (e) {
-            const btn = e.target.closest('[data-bs-target="#modalEdit"]');
-            if (!btn) return;
-
-            const user = JSON.parse(btn.dataset.user);
-
-            document.getElementById('uusername').value = user.username ?? '';
-            document.getElementById('uname').value = user.name ?? '';
-        });
         const table = new TablePlus({
             url : getCos,
             columns : {
+                noLane: 'No Lane',
                 noMcLane : 'No Machine Lane',
                 date : 'Date',
                 typeModel : 'Type Model',
@@ -38,8 +30,12 @@
 
                         const selectedData = table.rows({ selected: true }).data()[0];
 
-                        $('#uusername').val(selectedData.username);
-                        $('#uname').val(selectedData.name);
+                        $('#unoLane').val(selectedData.laneId);
+                        $('#unoMcLane').val(selectedData.noMcLane);
+                        $('#udate').val(selectedData.date);
+                        $('#utypeModel').val(selectedData.typeModel);
+                        $('#uzeroClaim').val(selectedData.zeroClaim);
+                        $('#ulasClaim').val(selectedData.lasClaim);
 
                         $('#modalEdit').modal('show');
                     }
@@ -192,7 +188,6 @@ function crud()
     $('#editcos').on('click', function(e){
         e.preventDefault()
         var selected = table.rows({selected: true}).ids()
-        console.log(selected)
         var form = new FormData($('#formeditcos')[0])
         const btnAdd = $('#editcos')
         const btnLoading = $('#loadingedit')

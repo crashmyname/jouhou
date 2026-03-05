@@ -7,6 +7,9 @@ use PDO;
 use PDOException;
 use Bpjs\Framework\Helpers\Database;
 use Bpjs\Framework\Helpers\DB;
+use Bpjs\Framework\Database\Grammar\MySqlGrammar;
+use Bpjs\Framework\Database\Grammar\PostgresGrammar;
+use Bpjs\Framework\Database\Grammar\SqlServerGrammar;
 
 class BaseModel
 {
@@ -29,6 +32,7 @@ class BaseModel
     protected $orWhereConditions = [];
     protected $with = [];
     protected array $relations = [];
+    protected $grammar;
 
     public function __construct($attributes = [])
     {
@@ -37,6 +41,35 @@ class BaseModel
         }
         $this->attributes = $this->filterAttributes($attributes);
         $this->connect();
+        $this->resolveGrammar();
+    }
+
+    public static function getDriver()
+    {
+        $pdo = Database::connection();
+        return $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+    }
+
+    private function resolveGrammar()
+    {
+        $driver = $this->connection->getAttribute(PDO::ATTR_DRIVER_NAME);
+
+        switch ($driver) {
+            case 'mysql':
+                $this->grammar = new MySqlGrammar();
+                break;
+
+            case 'pgsql':
+                $this->grammar = new PostgresGrammar();
+                break;
+
+            case 'sqlsrv':
+                $this->grammar = new SqlServerGrammar();
+                break;
+
+            default:
+                throw new \Exception("Unsupported driver: {$driver}");
+        }
     }
 
     private function connect()
@@ -252,14 +285,14 @@ class BaseModel
 
     public function whereMonth($column, $month)
     {
-        $this->whereConditions[] = "MONTH({$column}) = :month";
+        $this->whereConditions[] = $this->grammar->month($column) . " = :month";
         $this->whereParams[':month'] = $month;
         return $this;
     }
 
     public function whereYear($column, $year)
     {
-        $this->whereConditions[] = "YEAR({$column}) = :year";
+        $this->whereConditions[] = $this->grammar->year($column) . " = :year";
         $this->whereParams[':year'] = $year;
         return $this;
     }
@@ -548,7 +581,7 @@ class BaseModel
             $currentPage = max(1, min($currentPage, $lastPage));
             $offset = ($currentPage - 1) * $perPage;
 
-            $sql .= " LIMIT {$perPage} OFFSET {$offset}";
+            $sql .= " " . $this->grammar->limitOffset($perPage, $offset);
             $stmt = $this->connection->prepare($sql);
             foreach ($this->whereParams as $key => $value) {
                 $stmt->bindValue($key, $value);
@@ -812,7 +845,7 @@ class BaseModel
     public function save()
     {
         try{
-            $this->connection = DB::getConnection();
+            $this->connection = Database::connection();
             $table = self::$dynamicTable ?? $this->table;
     
             if (!empty($this->attributes[$this->primaryKey])) {
@@ -854,7 +887,7 @@ class BaseModel
     public function updates($data = null)
     {
         try {
-            $this->connection = DB::getConnection();
+            $this->connection = Database::connection();
             $table = self::$dynamicTable ?? $this->table;
 
             $dataToUpdate = $data ?? array_filter($this->attributes, function($key) {
@@ -970,11 +1003,14 @@ class BaseModel
 
         try {
             $instance = new static();
-            $connection = DB::getConnection();
+            $connection = Database::connection();
             $table = self::$dynamicTable ?? $instance->table ?? 'default_table';
 
             $columns = array_keys($rows[0]);
-            $columnList = implode(',', array_map(fn($col) => "`$col`", $columns));
+            $columnList = implode(',', array_map(
+                fn($col) => $instance->grammar->wrap($col),
+                $columns
+            ));
 
             $placeholderRow = '(' . implode(',', array_fill(0, count($columns), '?')) . ')';
             $placeholders = implode(',', array_fill(0, count($rows), $placeholderRow));
@@ -1019,7 +1055,7 @@ class BaseModel
 
     public function update($data)
     {
-        $this->connection = DB::getConnection();
+        $this->connection = Database::connection();
         $setClause = [];
         foreach ($data as $key => $value) {
             $setClause[] = "{$key} = :{$key}";
@@ -1095,7 +1131,7 @@ class BaseModel
     public function deleteWithRelations(array $relations = [])
     {
         try {
-            $this->connection = DB::getConnection();
+            $this->connection = Database::connection();
             $table = self::$dynamicTable ?? $this->table;
 
             $relationsToDelete = !empty($relations) ? $relations : array_keys($this->relations);
@@ -1408,7 +1444,7 @@ class BaseModel
 
                     if (!isset($this->attributes[$localKey])) break;
 
-                    $conn = DB::getConnection();
+                    $conn = Database::connection();
                     $sql = "
                         SELECT r.* 
                         FROM {$relatedModel->table} AS r

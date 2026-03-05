@@ -13,4 +13,9 @@ class Cos extends BaseModel
     {
         return $this->belongsTo(Lane::class,'laneId','laneId');
     }
+
+    public static function dataIsExsist($id)
+    {
+        self::find($id);
+    }
 }

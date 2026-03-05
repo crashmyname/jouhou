@@ -7,6 +7,10 @@ use App\Models\Lane;
 class LaneRepository
 {
     // Repository here
+    public function all()
+    {
+        return Lane::all();
+    }
     public function createLane(array $data)
     {
         $lane = Lane::create($data);

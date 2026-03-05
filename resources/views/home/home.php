@@ -9,6 +9,7 @@
     <link href="<?= asset('tabler/dist/css/tabler-payments.min.css?1692870487')?>" rel="stylesheet"/>
     <link href="<?= asset('tabler/dist/css/tabler-vendors.min.css?1692870487')?>" rel="stylesheet"/>
     <link href="<?= asset('tabler/dist/css/demo.min.css?1692870487')?>" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <link rel="shortcut icon" href="<?= asset('ISE.png')?>" type="image/x-icon">
   </head>
     <style>
@@ -49,10 +50,10 @@
       <div class="container-xl position-relative d-flex justify-content-center">
 
         <div class="position-absolute start-0">
-          <select class="form-control">
-            <option>Line 1</option>
-            <option>Line 2</option>
-            <option>Line 3</option>
+          <select class="form-control" name="lane" id="lane">
+            <?php foreach($lane as $ln):?>
+              <option value="<?= $ln->laneId?>"><?= $ln->noLane?></option>
+            <?php endforeach; ?>
           </select>
         </div>
         <h1 class="navbar-brand m-0 text-center fs-1">
@@ -86,22 +87,22 @@
                     <tr>
                       <td>NO MC/LANE</td>
                       <td>:</td>
-                      <td width="200px"></td>
+                      <td width="200px" id="noMcLane"></td>
                     </tr>
                     <tr>
                       <td>DATE</td>
                       <td>:</td>
-                      <td width="200px"></td>
+                      <td width="200px" id="date"></td>
                     </tr>
                     <tr>
                       <td>TYPE / MODEL</td>
                       <td>:</td>
-                      <td width="200px"></td>
+                      <td width="200px" id="typeModel"></td>
                     </tr>
                     <tr>
                       <td>ZERO CLAIM</td>
                       <td>:</td>
-                      <td width="200px"></td>
+                      <td width="200px" id="zeroClaim"></td>
                     </tr>
                     <tr>
                       <td colspan="2">GROUP</td>
@@ -130,7 +131,7 @@
             <div id="card-layout-sheet2" class="collapse show">
               <div class="card-body text-center">
     
-                <img src="<?= asset('image/mc1.png')?>"
+                <img src="" id="image-layout"
                     class="img-fluid rounded cursor-pointer"
                     style="max-width:300px;"
                     data-bs-toggle="modal"
@@ -684,6 +685,66 @@ DIKECUALIKAN</h1>
     function showImage(src) {
       document.getElementById('previewImage').src = src;
     }
+    </script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+    const laneSelect = document.getElementById("lane");
+
+    function loadData(laneId){
+        $.ajax({
+            url: '<?= url('cos/')?>' + laneId,
+            type: 'GET',
+            success: function(res){
+                const data = res.data;
+                document.getElementById("noMcLane").innerText = data.noMcLane;
+                document.getElementById("date").innerText = data.date;
+                document.getElementById("typeModel").innerText = data.typeModel;
+                document.getElementById("zeroClaim").innerText = data.zeroClaim;
+                document.getElementById("lastClaim").innerText = data.lasClaim;
+            }
+        });
+        $.ajax({
+            url: '<?= url('layout/')?>' + laneId,
+            type: 'GET',
+            success: function(res){
+                const image = document.getElementById("image-layout");
+
+                image.src = res.data.encrypt_url;
+            },
+            error: function(){
+                const image = document.getElementById("image-layout");
+
+                image.src = '<?= asset_v('image/no-image.png')?>';
+            }
+        });
+    }
+
+    loadData(laneSelect.value);
+
+    laneSelect.addEventListener("change", function(){
+        loadData(this.value);
+    });
+    
+    const socket = io("http://localhost:3000");
+    socket.emit("join-lane", laneSelect.value);
+
+    laneSelect.addEventListener("change", function(){
+        socket.emit("join-lane", this.value);
+    });
+    socket.on("cos-update", function(data) {
+        if(data.laneId == laneSelect.value){
+            document.getElementById("noMcLane").innerText = data.noMcLane;
+            document.getElementById("date").innerText = data.date;
+            document.getElementById("typeModel").innerText = data.typeModel;
+            document.getElementById("zeroClaim").innerText = data.zeroClaim;
+            document.getElementById("lastClaim").innerText = data.lasClaim;
+        }
+    });
+    socket.on("layout-update", function(data){
+      if(data.laneId == laneSelect.value){
+        document.getElementById("image-layout").src = data.encrypt_url
+      }
+    })
     </script>
     <!-- Libs JS -->
     <script src="<?= asset('tabler/dist/libs/apexcharts/dist/apexcharts.min.js?1692870487')?>" defer></script>

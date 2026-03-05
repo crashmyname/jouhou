@@ -34,7 +34,11 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">No Lane</label>
-                            <input type="text" class="form-control" name="noLane" id="noLane">
+                            <select name="noLane" id="noLane" class="form-control">
+                                <?php foreach($lane as $ln):?>
+                                    <option value="<?= $ln->laneId?>"><?= $ln->noLane?></option>
+                                <?php endforeach;?>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">No Machine Lane</label>
@@ -88,6 +92,14 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
+                            <label class="form-label">No Lane</label>
+                            <select name="noLane" id="unoLane" class="form-control">
+                                <?php foreach($lane as $ln):?>
+                                    <option value="<?= $ln->laneId?>"><?= $ln->noLane?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">No Machine Lane</label>
                             <input type="text" class="form-control" name="noMcLane" id="unoMcLane">
                         </div>
@@ -117,7 +129,7 @@
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Update user
+                            Update Customer Outflow Situation
                         </button>
                         <button class="btn btn-yellow ms-auto" style="display: none;" id="loadingedit" disabled>
                             <div class="spinner-border me-2" role="status"></div>

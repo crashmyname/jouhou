@@ -7,6 +7,15 @@ use App\Models\Cos;
 class CosRepository
 {
     // Repository here
+    public function cosIsExists($id)
+    {
+        return Cos::exists(['laneId' => $id]);
+    }
+    public function getCosByLaneId($id)
+    {
+        $cos = Cos::find($id);
+        return $cos->toArray();
+    }
     public function createCos(array $data)
     {
         $cos = Cos::create($data);

@@ -22,7 +22,7 @@ class UserController extends BaseController
     public function getData(Request $request, UserService $userService)
     {
         if(!$request->isAjax()){
-            return redirect('users');
+            return redirect('admin/user');
         }
         $userService->getData([
             'filters' => $request->input('filters',[]) ?? [],

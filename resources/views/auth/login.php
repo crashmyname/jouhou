@@ -142,7 +142,7 @@
                                   clearInterval(timerInterval);
                               }
                           }).then((result) => {
-                              window.location.href = "<?= url('admin/user') ?>";
+                              window.location.href = "<?= route('admin') ?>";
                           });
                       } else {
                           btn.show()
