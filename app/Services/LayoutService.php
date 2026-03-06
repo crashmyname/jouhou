@@ -35,13 +35,6 @@ class LayoutService
                 'message' => 'success get data',
                 'data' => $layout
             ];
-        } else {
-            return [
-                'success' => false,
-                'status' => 404,
-                'message' => 'data not found',
-                'data' => 'data not found'
-            ];
         }
     }
     public function create(array $data,$file)

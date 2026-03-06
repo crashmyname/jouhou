@@ -35,6 +35,19 @@ class FourMController extends BaseController
         ]);
     }
 
+    public function get4mByLane(Request $request, $laneId, CFourMService $service)
+    {
+        if(!$request->isAjax()){
+            return redirect('');
+        }
+        $result = $service->get4MByLane($laneId);
+        return Response::json([
+            'status' => $result['status'],
+            'message' => $result['message'] ?? 'success',
+            'data' => $result['data'] ?? null
+        ], $result['status']);
+    }
+
     public function store(Request $request)
     {
         $data = [

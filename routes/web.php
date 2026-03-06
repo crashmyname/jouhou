@@ -3,9 +3,11 @@
 use App\Controllers\ApiController;
 use App\Controllers\AuthController;
 use App\Controllers\COSController;
+use App\Controllers\FourMController;
 use App\Controllers\HomeController;
 use App\Controllers\LaneController;
 use App\Controllers\LsController;
+use App\Controllers\PointSkillController;
 use App\Controllers\UserController;
 use Bpjs\Framework\Helpers\AuthMiddleware;
 use Bpjs\Framework\Helpers\Route;
@@ -47,6 +49,20 @@ Route::group([AuthMiddleware::class], function(){
     Route::put('/admin/layout-sheet/{id}',[LsController::class,'update'])->name('ls.update');
     Route::delete('/admin/layout-sheet/{id}',[LsController::class,'destroy'])->name('ls.destroy');
 
+    // 4M
+    Route::get('/admin/4m',[FourMController::class,'index'])->name('4m.index');
+    Route::get('/admin/4m/getdata',[FourMController::class,'getData'])->name('4m.getdata');
+    Route::post('/admin/4m',[FourMController::class,'store'])->name('4m.create');
+    Route::put('/admin/4m/{id}',[FourMController::class,'update'])->name('4m.update');
+    Route::delete('/admin/4m/{id}',[FourMController::class,'destroy'])->name('4m.destroy');
+
+    // Point Skill
+    Route::get('/admin/point-skill',[PointSkillController::class,'index'])->name('ps.index');
+    Route::get('/admin/point-skill/getdata',[PointSkillController::class,'getData'])->name('ps.getdata');
+    Route::post('/admin/point-skill',[PointSkillController::class,'store'])->name('ps.create');
+    Route::put('/admin/point-skill/{id}',[PointSkillController::class,'update'])->name('ps.update');
+    Route::delete('/admin/point-skill/{id}',[PointSkillController::class,'destroy'])->name('ps.destroy');
+
     Route::post('/emp',[ApiController::class, 'getEmployee'])->name('getemp');
 });
 Route::get('/file/secure',function(){
@@ -54,3 +70,6 @@ Route::get('/file/secure',function(){
 });
 Route::get('/cos/{id}',[COSController::class,'getCosByLane'])->name('cos.lane');
 Route::get('/layout/{id}',[LsController::class,'getLayoutByLane'])->name('layout.lane');
+Route::get('/4m/{id}',[FourMController::class,'get4mByLane'])->name('4m.lane');
+Route::get('/point-skill/{id}',[PointSkillController::class,'getPointByLane'])->name('point.lane');
+Route::get('/dashboard/{laneid}',[HomeController::class,'dashboard'])->name('dashboard');

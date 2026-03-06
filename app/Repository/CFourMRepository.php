@@ -12,6 +12,12 @@ class CFourMRepository
         return CFourM::exists(['laneId'=>$id]);
     }
 
+    public function get4MByLaneId($id)
+    {
+        $fourm = CFourM::query()->where('laneId','=',$id)->first()?->toArray();
+        return $fourm;
+    }
+
     public function getById($id)
     {
         return CFourM::find($id);

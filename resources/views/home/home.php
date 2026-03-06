@@ -177,11 +177,11 @@
                         <td>
                             <div class="checkbox">
                               <label>
-                                <input type="checkbox" value="" checked="checked">
+                                <input type="checkbox" value="" id="man-a">
                                 ADA
                               </label><br>
                               <label>
-                                <input type="checkbox" value="">
+                                <input type="checkbox" value="" id="man-ta">
                                 TIDAK ADA
                               </label>
                             </div>
@@ -189,11 +189,11 @@
                         <td>
                             <div class="checkbox">
                               <label>
-                                <input type="checkbox" value="" checked="checked">
+                                <input type="checkbox" value="" id="machine-a">
                                 ADA
                               </label><br>
                               <label>
-                                <input type="checkbox" value="">
+                                <input type="checkbox" value="" id="machine-ta">
                                 TIDAK ADA
                               </label>
                             </div>
@@ -207,11 +207,11 @@
                         <td>
                           <div class="checkbox">
                               <label>
-                                <input type="checkbox" value="" checked="checked">
+                                <input type="checkbox" value="" id="material-a">
                                 ADA
                               </label><br>
                               <label>
-                                <input type="checkbox" value="">
+                                <input type="checkbox" value="" id="material-ta">
                                 TIDAK ADA
                               </label>
                             </div>
@@ -219,11 +219,11 @@
                         <td>
                           <div class="checkbox">
                               <label>
-                                <input type="checkbox" value="" checked="checked">
+                                <input type="checkbox" value="" id="methode-a">
                                 ADA
                               </label><br>
                               <label>
-                                <input type="checkbox" value="">
+                                <input type="checkbox" value="" id="methode-ta">
                                 TIDAK ADA
                               </label>
                             </div>
@@ -342,45 +342,39 @@ DIKECUALIKAN</h1>
                   <thead>
                     <tr>
                       <td>MP 1</td>
-                      <td>MP 1</td> 
+                      <td>MP 2</td> 
                     </tr>
                     <tr>
-                      <td>EKO NURCAHYONO</td>
-                      <td>BAGUS YOYO SANTOSO</td>
+                      <td id="empname1">-</td>
+                      <td id="empname2">-</td>
                     </tr>
                     <tr>
-                      <td>73647</td>
-                      <td>73417</td>
+                      <td id="empnik1">-</td>
+                      <td id="empnik2">-</td>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
                         
-                        <img src="<?= asset('image/73647.jfif')?>"  alt="Image" style="width:130px;height:140px;">
+                        <img src="" id="imageName1" alt="Image" style="width:130px;height:140px;">
                         
                       </td>
                       <td>
-                        <img src="<?= asset('image/73417.jfif')?>"  alt="Image" style="width:130px;height:140px;">
+                        <img src="" id="imageName2" alt="Image" style="width:130px;height:140px;">
                       </td>
                     </tr>
                     <tr>
                       <td align="center">
                         <div class="row">
                           <div class="col-6">
-                            <div class="circle">
-                              <div class="quadrant q1 primary"></div>
-                              <div class="quadrant q2 primary"></div>
-                              <div class="quadrant q3 gray"></div>
-                              <div class="quadrant q4 gray"></div>
+                            <div class="circle" id="pointskill1-1">
+                             
                             </div>
                           </div>
                           <div class="col-6">
-                            <div class="circle">
-                              <div class="quadrant q1 success"></div>
-                              <div class="quadrant q2 success"></div>
-                              <div class="quadrant q3 success"></div>
-                              <div class="quadrant q4 gray"></div>
+                            <div class="circle" id="pointskill1-2">
+                              
                             </div>
                           </div>
                         </div>
@@ -388,19 +382,13 @@ DIKECUALIKAN</h1>
                       <td align="center">
                         <div class="row">
                           <div class="col-6">
-                            <div class="circle">
-                              <div class="quadrant q1 primary"></div>
-                              <div class="quadrant q2 primary"></div>
-                              <div class="quadrant q3 gray"></div>
-                              <div class="quadrant q4 gray"></div>
+                            <div class="circle" id="pointskill2-1">
+                              
                             </div>
                           </div>
                           <div class="col-6">
-                            <div class="circle">
-                              <div class="quadrant q1 success"></div>
-                              <div class="quadrant q2 success"></div>
-                              <div class="quadrant q3 success"></div>
-                              <div class="quadrant q4 gray"></div>
+                            <div class="circle" id="pointskill2-2">
+                              
                             </div>
                           </div>
                         </div>
@@ -692,29 +680,140 @@ DIKECUALIKAN</h1>
 
     function loadData(laneId){
         $.ajax({
-            url: '<?= url('cos/')?>' + laneId,
+            url: '<?= url('dashboard/')?>' + laneId,
             type: 'GET',
             success: function(res){
-                const data = res.data;
-                document.getElementById("noMcLane").innerText = data.noMcLane;
-                document.getElementById("date").innerText = data.date;
-                document.getElementById("typeModel").innerText = data.typeModel;
-                document.getElementById("zeroClaim").innerText = data.zeroClaim;
-                document.getElementById("lastClaim").innerText = data.lasClaim;
-            }
-        });
-        $.ajax({
-            url: '<?= url('layout/')?>' + laneId,
-            type: 'GET',
-            success: function(res){
-                const image = document.getElementById("image-layout");
+                const cos = res.data.cos;
+                const layout = res.data.layout;
+                const fourm = res.data.fourm;
+                const pointskill = res.data.point
+                if(cos){
+                  document.getElementById("noMcLane").innerText = cos.noMcLane;
+                  document.getElementById("date").innerText = cos.date;
+                  document.getElementById("typeModel").innerText = cos.typeModel;
+                  document.getElementById("zeroClaim").innerText = cos.zeroClaim;
+                  // document.getElementById("lastClaim").innerText = cos.lasClaim;
+                }
+                if(layout){
+                    $("#image-layout").attr("src", layout.encrypt_url)
+                }else{
+                    $("#image-layout").attr("src", "<?= asset_v('image/no-image.png')?>")
+                }
+                if(fourm){
+                  if(fourm.man == '1'){
+                    $('#man-a').prop('checked', true);
+                    $('#man-ta').prop('checked', false);
+                  } else {
+                    $('#man-a').prop('checked', false);
+                    $('#man-ta').prop('checked', true);
+                  }
+                  if(fourm.machine == '1'){
+                    $('#machine-a').prop('checked', true);
+                    $('#machine-ta').prop('checked', false);
+                  } else {
+                    $('#machine-a').prop('checked', false);
+                    $('#machine-ta').prop('checked', true);
+                  }
+                  if(fourm.material == '1'){
+                    $('#material-a').prop('checked', true);
+                    $('#material-ta').prop('checked', false);
+                  } else {
+                    $('#material-a').prop('checked', false);
+                    $('#material-ta').prop('checked', true);
+                  }
+                  if(fourm.methode == '1'){
+                    $('#methode-a').prop('checked', true);
+                    $('#methode-ta').prop('checked', false);
+                  } else {
+                    $('#methode-a').prop('checked', false);
+                    $('#methode-ta').prop('checked', true);
+                  }
+                } else {
+                  $('#man-a').prop('checked', false);
+                  $('#man-ta').prop('checked', false);
+                  $('#machine-a').prop('checked', false);
+                  $('#machine-ta').prop('checked', false);
+                  $('#material-a').prop('checked', false);
+                  $('#material-ta').prop('checked', false);
+                  $('#methode-a').prop('checked', false);
+                  $('#methode-ta').prop('checked', false);
+                }
+                if(pointskill){
+                  $('#empname1').text(pointskill[0].empName)
+                  $('#empnik1').text(pointskill[0].empNik)
+                  $("#imageName1").attr("src", pointskill[0].encrypt_url)
+                  let p = parseInt(pointskill[0].pointSkill)
+                  let p2 = parseInt(pointskill[0].pointSkill2)
+                  const html = ` 
+                              <div class="quadrant q1 ${p >= 1 ? 'primary' : 'gray'}"></div>
+                              <div class="quadrant q2 ${p >= 2 ? 'primary' : 'gray'}"></div>
+                              <div class="quadrant q3 ${p >= 3 ? 'primary' : 'gray'}"></div>
+                              <div class="quadrant q4 ${p >= 4 ? 'primary' : 'gray'}"></div>
+                              `
+                  const html2 = `
+                              <div class="quadrant q1 ${p2 >= 1 ? 'success' : 'gray'}"></div>
+                              <div class="quadrant q2 ${p2 >= 2 ? 'success' : 'gray'}"></div>
+                              <div class="quadrant q3 ${p2 >= 3 ? 'success' : 'gray'}"></div>
+                              <div class="quadrant q4 ${p2 >= 4 ? 'success' : 'gray'}"></div>
+                  `
+                  $('#pointskill1-1').html(html)
+                  $('#pointskill1-2').html(html2)
 
-                image.src = res.data.encrypt_url;
-            },
-            error: function(){
-                const image = document.getElementById("image-layout");
-
-                image.src = '<?= asset_v('image/no-image.png')?>';
+                  $('#empname2').text(pointskill[1].empName)
+                  $('#empnik2').text(pointskill[1].empNik)
+                  $("#imageName2").attr("src", pointskill[1].encrypt_url)
+                  let p21 = parseInt(pointskill[1].pointSkill)
+                  let p22 = parseInt(pointskill[1].pointSkill2)
+                  const html21 = ` 
+                              <div class="quadrant q1 ${p21 >= 1 ? 'primary' : 'gray'}"></div>
+                              <div class="quadrant q2 ${p21 >= 2 ? 'primary' : 'gray'}"></div>
+                              <div class="quadrant q3 ${p21 >= 3 ? 'primary' : 'gray'}"></div>
+                              <div class="quadrant q4 ${p21 >= 4 ? 'primary' : 'gray'}"></div>
+                              `
+                  const html22 = `
+                              <div class="quadrant q1 ${p22 >= 1 ? 'success' : 'gray'}"></div>
+                              <div class="quadrant q2 ${p22 >= 2 ? 'success' : 'gray'}"></div>
+                              <div class="quadrant q3 ${p22 >= 3 ? 'success' : 'gray'}"></div>
+                              <div class="quadrant q4 ${p22 >= 4 ? 'success' : 'gray'}"></div>
+                  `
+                  $('#pointskill2-1').html(html21)
+                  $('#pointskill2-2').html(html22)
+                } else {
+                  $('#empname1').text('-')
+                  $('#empnik1').text('-')
+                  $("#imageName1").attr("src", '<?= asset_v('image/no-image.png')?>')
+                  $('#empname2').text('-')
+                  $('#empnik2').text('-')
+                  $("#imageName2").attr("src", '<?= asset_v('image/no-image.png')?>')
+                  const html = ` 
+                              <div class="quadrant q1 gray"></div>
+                              <div class="quadrant q2 gray"></div>
+                              <div class="quadrant q3 gray"></div>
+                              <div class="quadrant q4 gray"></div>
+                              `
+                  const html2 = `
+                              <div class="quadrant q1 gray"></div>
+                              <div class="quadrant q2 gray"></div>
+                              <div class="quadrant q3 gray"></div>
+                              <div class="quadrant q4 gray"></div>
+                  `
+                  $('#pointskill1-1').html(html)
+                  $('#pointskill1-2').html(html2)
+                  const html21 = ` 
+                              <div class="quadrant q1 gray"></div>
+                              <div class="quadrant q2 gray"></div>
+                              <div class="quadrant q3 gray"></div>
+                              <div class="quadrant q4 gray"></div>
+                              `
+                  const html22 = `
+                              <div class="quadrant q1 gray"></div>
+                              <div class="quadrant q2 gray"></div>
+                              <div class="quadrant q3 gray"></div>
+                              <div class="quadrant q4 gray"></div>
+                  `
+                  $('#pointskill2-1').html(html21)
+                  $('#pointskill2-2').html(html22)
+                }
             }
         });
     }
@@ -740,6 +839,43 @@ DIKECUALIKAN</h1>
             document.getElementById("lastClaim").innerText = data.lasClaim;
         }
     });
+    socket.on("layout-update", function(data){
+      if(data.laneId == laneSelect.value){
+        document.getElementById("image-layout").src = data.encrypt_url
+      }
+    })
+    socket.on("fourm-update", function(data){
+      if(data.laneId == laneSelect.value){
+        if(data.man == '1'){
+          $('#man-a').prop('checked', true);
+          $('#man-ta').prop('checked', false);
+        } else {
+          $('#man-a').prop('checked', false);
+          $('#man-ta').prop('checked', true);
+        }
+        if(data.machine == '1'){
+          $('#machine-a').prop('checked', true);
+          $('#machine-ta').prop('checked', false);
+        } else {
+          $('#machine-a').prop('checked', false);
+          $('#machine-ta').prop('checked', true);
+        }
+        if(data.material == '1'){
+          $('#material-a').prop('checked', true);
+          $('#material-ta').prop('checked', false);
+        } else {
+          $('#material-a').prop('checked', false);
+          $('#material-ta').prop('checked', true);
+        }
+        if(data.methode == '1'){
+          $('#methode-a').prop('checked', true);
+          $('#methode-ta').prop('checked', false);
+        } else {
+          $('#methode-a').prop('checked', false);
+          $('#methode-ta').prop('checked', true);
+        }
+      }
+    })
     socket.on("layout-update", function(data){
       if(data.laneId == laneSelect.value){
         document.getElementById("image-layout").src = data.encrypt_url

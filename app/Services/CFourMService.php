@@ -21,6 +21,19 @@ class CFourMService
                         ->handleDistinct($data['distinct'] ?? null)
                         ->make();
     }
+
+    public function get4MByLane($id)
+    {
+        $fourm = $this->c4mRepository->get4MByLaneId($id);
+        if($fourm){
+            return [
+                'success' => true,
+                'status' => 200,
+                'message' => 'success get data',
+                'data' => $fourm
+            ];
+        }
+    }
     public function create(array $data): array
     {
         if($this->c4mRepository->C4MisExists($data['laneId'])){
@@ -48,13 +61,13 @@ class CFourMService
 
     public function update($id, array $data): array
     {
-        $layout = $this->c4mRepository->update4M($id,$data);
-        if($layout){
+        $fourm = $this->c4mRepository->update4M($id,$data);
+        if($fourm){
             return [
                 'success' => true,
                 'status' => 200,
                 'message' => 'Change 4M success update',
-                'data' => $layout
+                'data' => $fourm
             ];
         }
         return [
@@ -66,8 +79,8 @@ class CFourMService
 
     public function destroy($id)
     {
-        $layout = $this->c4mRepository->destroy4M($id);
-        if($layout){
+        $fourm = $this->c4mRepository->destroy4M($id);
+        if($fourm){
             return [
                 'success' => true,
                 'status' => 200,
