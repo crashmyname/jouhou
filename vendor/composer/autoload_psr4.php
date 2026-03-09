@@ -15,6 +15,8 @@ return array(
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Middlewares\\' => array($baseDir . '/app/Middleware'),
     'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
+    'Intervention\\Image\\' => array($vendorDir . '/intervention/image/src'),
+    'Intervention\\Gif\\' => array($vendorDir . '/intervention/gif/src'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Config\\' => array($baseDir . '/config'),
     'Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),

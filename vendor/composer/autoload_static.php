@@ -35,6 +35,11 @@ class ComposerStaticInit58a439baa63ce317551a65cb5db0a5b6
             'Middlewares\\' => 12,
             'Matrix\\' => 7,
         ),
+        'I' => 
+        array (
+            'Intervention\\Image\\' => 19,
+            'Intervention\\Gif\\' => 17,
+        ),
         'F' => 
         array (
             'Firebase\\JWT\\' => 13,
@@ -92,6 +97,14 @@ class ComposerStaticInit58a439baa63ce317551a65cb5db0a5b6
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'Intervention\\Image\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/intervention/image/src',
+        ),
+        'Intervention\\Gif\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/intervention/gif/src',
         ),
         'Firebase\\JWT\\' => 
         array (

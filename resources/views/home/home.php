@@ -106,7 +106,8 @@
                     </tr>
                     <tr>
                       <td colspan="2">GROUP</td>
-                      <td width="200px">LAST CLAIM <br>--/--/----</td>
+                      <td width="200px">LAST CLAIM <br>
+                      <p id="lastClaim"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -674,7 +675,7 @@ DIKECUALIKAN</h1>
       document.getElementById('previewImage').src = src;
     }
     </script>
-    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="<?= env('APP_NODE_SERVER')?>/socket.io/socket.io.js"></script>
     <script>
     const laneSelect = document.getElementById("lane");
 
@@ -689,10 +690,10 @@ DIKECUALIKAN</h1>
                 const pointskill = res.data.point
                 if(cos){
                   document.getElementById("noMcLane").innerText = cos.noMcLane;
-                  document.getElementById("date").innerText = cos.date;
+                  document.getElementById("date").innerText = cos.format_date;
                   document.getElementById("typeModel").innerText = cos.typeModel;
                   document.getElementById("zeroClaim").innerText = cos.zeroClaim;
-                  // document.getElementById("lastClaim").innerText = cos.lasClaim;
+                  document.getElementById("lastClaim").innerText = cos.format_date_claim;
                 }
                 if(layout){
                     $("#image-layout").attr("src", layout.encrypt_url)
@@ -824,7 +825,7 @@ DIKECUALIKAN</h1>
         loadData(this.value);
     });
     
-    const socket = io("http://localhost:3000");
+    const socket = io("<?= env('APP_NODE_SERVER')?>");
     socket.emit("join-lane", laneSelect.value);
 
     laneSelect.addEventListener("change", function(){
@@ -876,9 +877,84 @@ DIKECUALIKAN</h1>
         }
       }
     })
-    socket.on("layout-update", function(data){
+    socket.on("pointskill-update", function(data){
       if(data.laneId == laneSelect.value){
-        document.getElementById("image-layout").src = data.encrypt_url
+        if(data){
+            $('#empname1').text(data[0].empName)
+            $('#empnik1').text(data[0].empNik)
+            $("#imageName1").attr("src", data[0].encrypt_url)
+            let p = parseInt(data[0].pointSkill)
+            let p2 = parseInt(data[0].pointSkill2)
+            const html = ` 
+                        <div class="quadrant q1 ${p >= 1 ? 'primary' : 'gray'}"></div>
+                        <div class="quadrant q2 ${p >= 2 ? 'primary' : 'gray'}"></div>
+                        <div class="quadrant q3 ${p >= 3 ? 'primary' : 'gray'}"></div>
+                        <div class="quadrant q4 ${p >= 4 ? 'primary' : 'gray'}"></div>
+                        `
+            const html2 = `
+                        <div class="quadrant q1 ${p2 >= 1 ? 'success' : 'gray'}"></div>
+                        <div class="quadrant q2 ${p2 >= 2 ? 'success' : 'gray'}"></div>
+                        <div class="quadrant q3 ${p2 >= 3 ? 'success' : 'gray'}"></div>
+                        <div class="quadrant q4 ${p2 >= 4 ? 'success' : 'gray'}"></div>
+            `
+            $('#pointskill1-1').html(html)
+            $('#pointskill1-2').html(html2)
+
+            $('#empname2').text(data[1].empName)
+            $('#empnik2').text(data[1].empNik)
+            $("#imageName2").attr("src", data[1].encrypt_url)
+            let p21 = parseInt(data[1].pointSkill)
+            let p22 = parseInt(data[1].pointSkill2)
+            const html21 = ` 
+                        <div class="quadrant q1 ${p21 >= 1 ? 'primary' : 'gray'}"></div>
+                        <div class="quadrant q2 ${p21 >= 2 ? 'primary' : 'gray'}"></div>
+                        <div class="quadrant q3 ${p21 >= 3 ? 'primary' : 'gray'}"></div>
+                        <div class="quadrant q4 ${p21 >= 4 ? 'primary' : 'gray'}"></div>
+                        `
+            const html22 = `
+                        <div class="quadrant q1 ${p22 >= 1 ? 'success' : 'gray'}"></div>
+                        <div class="quadrant q2 ${p22 >= 2 ? 'success' : 'gray'}"></div>
+                        <div class="quadrant q3 ${p22 >= 3 ? 'success' : 'gray'}"></div>
+                        <div class="quadrant q4 ${p22 >= 4 ? 'success' : 'gray'}"></div>
+            `
+            $('#pointskill2-1').html(html21)
+            $('#pointskill2-2').html(html22)
+          } else {
+            $('#empname1').text('-')
+            $('#empnik1').text('-')
+            $("#imageName1").attr("src", '<?= asset_v('image/no-image.png')?>')
+            $('#empname2').text('-')
+            $('#empnik2').text('-')
+            $("#imageName2").attr("src", '<?= asset_v('image/no-image.png')?>')
+            const html = ` 
+                        <div class="quadrant q1 gray"></div>
+                        <div class="quadrant q2 gray"></div>
+                        <div class="quadrant q3 gray"></div>
+                        <div class="quadrant q4 gray"></div>
+                        `
+            const html2 = `
+                        <div class="quadrant q1 gray"></div>
+                        <div class="quadrant q2 gray"></div>
+                        <div class="quadrant q3 gray"></div>
+                        <div class="quadrant q4 gray"></div>
+            `
+            $('#pointskill1-1').html(html)
+            $('#pointskill1-2').html(html2)
+            const html21 = ` 
+                        <div class="quadrant q1 gray"></div>
+                        <div class="quadrant q2 gray"></div>
+                        <div class="quadrant q3 gray"></div>
+                        <div class="quadrant q4 gray"></div>
+                        `
+            const html22 = `
+                        <div class="quadrant q1 gray"></div>
+                        <div class="quadrant q2 gray"></div>
+                        <div class="quadrant q3 gray"></div>
+                        <div class="quadrant q4 gray"></div>
+            `
+            $('#pointskill2-1').html(html21)
+            $('#pointskill2-2').html(html22)
+          }
       }
     })
     </script>

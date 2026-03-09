@@ -58,7 +58,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Last Claim</label>
-                            <input type="text" class="form-control" name="lasClaim" id="lasClaim">
+                            <input type="date" class="form-control" name="lasClaim" id="lasClaim">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -117,7 +117,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Last Claim</label>
-                            <input type="text" class="form-control" name="lasClaim" id="ulasClaim">
+                            <input type="date" class="form-control" name="lasClaim" id="ulasClaim">
                         </div>
                     </div>
                     <div class="modal-footer">

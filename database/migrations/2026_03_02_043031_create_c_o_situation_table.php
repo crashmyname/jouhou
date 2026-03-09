@@ -14,7 +14,7 @@ class CreateCOSituationTable
         $table->date('date');
         $table->string('typeModel')->nullable();
         $table->string('zeroClaim')->nullable();
-        $table->string('lasClaim')->nullable();
+        $table->date('lasClaim')->nullable();
         $table->timestamp('created_at')->default('CURRENT_TIMESTAMP');
         $table->timestamp('updated_at')->default('CURRENT_TIMESTAMP');
         $sql = $table->buildCreateSQL();

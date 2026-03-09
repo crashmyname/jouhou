@@ -14,7 +14,12 @@ class CosRepository
     public function getCosByLaneId($id)
     {
         $cos = Cos::find($id);
-        return $cos->toArray();
+        if($cos){
+            $data = $cos->toArray();
+            $data['format_date'] = $cos->iDFormat();
+            $data['format_date_claim'] = $cos->idFormatClaim();
+            return $data;
+        }
     }
     public function createCos(array $data)
     {
