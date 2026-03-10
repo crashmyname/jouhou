@@ -12,7 +12,7 @@ class PointService
     public function getData(array $data)
     {
         return TablePlus::of('p_skill')
-                        ->select('noLane','description','psId','empName','empNik','profil','pointSkill','p_skill.laneId')
+                        ->select('noLane','description','psId','empName','empNik','profil','pointSkill','p_skill.laneId','pointSkill2')
                         ->leftJoin('lane','lane.laneId','=','p_skill.laneId')
                         ->searchable(['noLane','description','empName','empNik','profil','pointSkill'])
                         ->addColumn('profil_url', function($row){
@@ -89,6 +89,12 @@ class PointService
         }
         $point = $this->pointRepository->createPoint($data);
         if($point){
+            $points = $this->pointRepository->getPointByLaneId($data['laneId']);
+            $this->utilService->sendRealtimeUpdate([
+                'type' => 'pointskill-update',
+                'laneId' => $data['laneId'],
+                'point' => $points,
+            ]);
             return [
                 'success' => true,
                 'status' => 200,
@@ -120,6 +126,12 @@ class PointService
         $data['profil'] = $fileName;
         $point = $this->pointRepository->updatePoint($id,$data);
         if($point){
+            $points = $this->pointRepository->getPointByLaneId($data['laneId']);
+            $this->utilService->sendRealtimeUpdate([
+                'type' => 'pointskill-update',
+                'laneId' => $data['laneId'],
+                'point' => $points,
+            ]);
             return [
                 'success' => true,
                 'status' => 200,

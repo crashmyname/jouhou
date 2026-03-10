@@ -45,6 +45,14 @@ class CFourMService
         }
         $c4m = $this->c4mRepository->create4M($data);
         if($c4m){
+            $this->utilService->sendRealtimeUpdate([
+                'type' => 'fourm-update',
+                'laneId' => $data['laneId'],
+                'man' => $data['man'],
+                'machine' => $data['machine'],
+                'material' => $data['material'],
+                'methode' => $data['methode'],
+            ]);
             return [
                 'success' => true,
                 'status' => 200,
@@ -63,6 +71,14 @@ class CFourMService
     {
         $fourm = $this->c4mRepository->update4M($id,$data);
         if($fourm){
+            $this->utilService->sendRealtimeUpdate([
+                'type' => 'fourm-update',
+                'laneId' => $data['laneId'],
+                'man' => $data['man'],
+                'machine' => $data['machine'],
+                'material' => $data['material'],
+                'methode' => $data['methode'],
+            ]);
             return [
                 'success' => true,
                 'status' => 200,

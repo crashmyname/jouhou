@@ -16,28 +16,28 @@ class PointSkillRepository
     {
         return PointSkill::find($id);
     }
-   public function getPointByLaneId($id)
-{
-    $points = PointSkill::query()
-        ->where('laneId', '=', $id)
-        ->get();
+    public function getPointByLaneId($id)
+    {
+        $points = PointSkill::query()
+            ->where('laneId', '=', $id)
+            ->get();
 
-    $result = [];
+        $result = [];
 
-    foreach ($points as $point) {
+        foreach ($points as $point) {
 
-        $data = (array) $point;
+            $data = (array) $point;
 
-        $model = new PointSkill();
-        $model->profil = $point->profil;
+            $model = new PointSkill();
+            $model->profil = $point->profil;
 
-        $data['encrypt_url'] = $model->getEncryptUrl();
+            $data['encrypt_url'] = $model->getEncryptUrl();
 
-        $result[] = $data;
+            $result[] = $data;
+        }
+
+        return $result;
     }
-
-    return $result;
-}
 
     public function createPoint(array $data)
     {

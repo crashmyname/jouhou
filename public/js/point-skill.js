@@ -27,6 +27,7 @@
                     }
                 },
                 pointSkill : 'Point Skill',
+                pointSkill2 : 'Point Skill 2',
             },
             perPage: 10,
             perPageOptions: [10,20,50,100],
@@ -49,12 +50,13 @@
                         }
 
                         const selectedData = table.rows({ selected: true }).data()[0];
-
+                        console.log(selectedData)
                         $('#unoLane').val(selectedData.laneId);
                         $('#unoMcLane').val(selectedData.noMcLane);
                         $('#uempNik').val(selectedData.empNik);
                         $('#uempName').val(selectedData.empName);
                         $('#upointSkill').val(selectedData.pointSkill);
+                        $('#upointSkill2').val(selectedData.pointSkill2);
 
                         $('#modalEdit').modal('show');
                     }

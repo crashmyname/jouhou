@@ -48,7 +48,9 @@ app.post("/broadcast", (req, res) => {
         return res.status(400).json({ error: "laneId required" });
     }
 
-    io.to("lane-" + data.laneId).emit("cos-update", data);
+    const event = data.type;
+
+    io.to("lane-" + data.laneId).emit(event, data);
 
     res.json({ status: "ok" });
 });

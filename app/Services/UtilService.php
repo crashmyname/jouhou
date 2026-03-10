@@ -8,7 +8,7 @@ class UtilService
     // Service logic here
     public function sendRealtimeUpdate($data)
     {
-        $ch = curl_init("http://localhost:3000/broadcast");
+        $ch = curl_init(env('APP_NODE_SERVER')."/broadcast");
 
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));

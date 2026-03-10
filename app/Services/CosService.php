@@ -46,6 +46,15 @@ class CosService
         }
         $cos = $this->cosRepo->createCos($data);
         if($cos){
+            $this->utilService->sendRealtimeUpdate([
+                'type' => 'cos-update',
+                'laneId' => $data['laneId'],
+                'noMcLane' => $data['noMcLane'],
+                'date' => $data['date'],
+                'typeModel' => $data['typeModel'],
+                'zeroClaim' => $data['zeroClaim'],
+                'lasClaim' => $data['lasClaim']
+            ]);
             return [
                 'success' => true,
                 'status' => 200,
@@ -60,7 +69,7 @@ class CosService
         $cos = $this->cosRepo->updateCos($id,$data);
         if($cos){
             $this->utilService->sendRealtimeUpdate([
-                'type' => 'cos_update',
+                'type' => 'cos-update',
                 'laneId' => $data['laneId'],
                 'noMcLane' => $data['noMcLane'],
                 'date' => $data['date'],

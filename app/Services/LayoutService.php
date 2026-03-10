@@ -48,7 +48,13 @@ class LayoutService
         }
         $layout = $this->layoutRepository->createLayout($data);
         if($layout){
+            $lay = $this->layoutRepository->getLayoutByLaneId($data['laneId']);
             $this->utilService->upload($file,'LayoutSheet');
+            $this->utilService->sendRealtimeUpdate([
+                'type' => 'layout-update',
+                'laneId' => $data['laneId'],
+                'encrypt_url' => $lay['encrypt_url'],
+            ]);
             return [
                 'success' => true,
                 'status' => 200,
@@ -75,6 +81,12 @@ class LayoutService
         $data['image'] = $fileName;
         $layout = $this->layoutRepository->updateLayout($id,$data);
         if($layout){
+            $lay = $this->layoutRepository->getLayoutByLaneId($data['laneId']);
+            $this->utilService->sendRealtimeUpdate([
+                'type' => 'layout-update',
+                'laneId' => $data['laneId'],
+                'encrypt_url' => $lay['encrypt_url'],
+            ]);
             return [
                 'success' => true,
                 'status' => 200,
