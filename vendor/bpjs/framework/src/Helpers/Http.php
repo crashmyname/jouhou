@@ -25,29 +25,38 @@ class Http
 
     private static function request($method, $url, $data = null, $headers = [])
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        $ch = \curl_init();
+
+        \curl_setopt_array($ch, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_TIMEOUT => 30
+        ]);
+
         if ($data) {
             $jsonData = json_encode($data);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            \curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             $headers[] = 'Content-Type: application/json';
             $headers[] = 'Content-Length: ' . strlen($jsonData);
         }
-        if (!empty($headers)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        }
-        $result = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if (curl_errno($ch)) {
-            throw new \Exception('Request Error: ' . curl_error($ch));
+
+        if ($headers) {
+            \curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }
 
-        curl_close($ch);
+        $result = \curl_exec($ch);
+        $httpCode = \curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (\curl_errno($ch)) {
+            throw new \Exception(\curl_error($ch));
+        }
+
+        \curl_close($ch);
+
         return [
             'status' => $httpCode,
-            'response' => json_decode($result, true),
+            'response' => json_decode($result, true)
         ];
     }
 }
